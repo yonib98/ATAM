@@ -1,49 +1,53 @@
 .global main
 .section .data
-source: .ascii "memmove can be very useful"
+source: .ascii "memmove can be very useful..."
 #:memmove is very very useful"
 #         is very useful
-num: .int 11
+num: .int -8
 .section .text
 main:
-lea source+20, %rbx
-lea source+15, %rdx
-movl num, %r8d
-movsx %r8d, %r8
+lea source+8, %rbx #rbx=source
+lea source, %rdx #rdx=dest
+movl num, %r8d 
+movsx %r8d, %r8 #r8=num
 cmp $0,%r8d
-jl LABEL_1
-LABEL2:
+jl negative_n
+
+copy_start:
 mov %rdx,%r9
 sub %rbx,%r9 #destinaton-source is saved in r9
-LABEL_COPY:
+cmp $0, %r9
+jl normal_copy
+reverse_copy:
 mov %r8, %rcx
 dec %rcx
-mov %r8, %r10 #r10<-num
-sub %r9, %r10 #r10<-num-(destination-source)
-cmp $0,%r10
-jle FIX
-BEFORE_LOOP:
 mov %rdx, %r13
 add %r8, %r13
 dec %r13
-LOOP_COPY:
+loop_reverse_copy:
 movb (%rbx, %rcx,1), %r11b
 movb %r11b, (%r13)
 dec %rcx
 dec %r13
 cmp $0,%rcx
-jge LOOP_COPY
+jge loop_reverse_copy
 jmp END
 
-FIX:
-mov $0, %r10
-jmp BEFORE_LOOP
-
-LABEL_1:
+negative_n:
 mov %rdx, %rcx
 mov %rbx, %rdx
 mov %rcx, %rbx
 imul $-1,%r8,%r8
-jmp LABEL2
+jmp copy_start
+
+normal_copy:
+xor %rcx,%rcx
+normal_copy_loop:
+movb (%rbx,%rcx,1),%r11b
+movb %r11b, (%rdx,%rcx,1)
+inc %rcx
+cmp %rcx, %r8
+jne normal_copy_loop
+jmp end
 
 END:

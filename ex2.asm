@@ -2,6 +2,8 @@
 
 .section .text
 _start:
+cmp $0,(num)
+je END
 lea source, %rbx 
 lea destination, %rdx 
 movl num, %r8d 
@@ -44,6 +46,6 @@ movb %r11b, (%rdx,%rcx,1)
 inc %rcx
 cmp %rcx, %r8
 jne normal_copy_loop
-jmp end
+jmp END
 
 END:

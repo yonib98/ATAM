@@ -3,7 +3,7 @@
 .section .text
 
   mov (CountBits), %eax
-  test $2, %eax
+  cmpl $64, %eax
   jne bad_exit
 
   movq $60, %rax
@@ -16,5 +16,5 @@ bad_exit:
   syscall
 
 .section .data
-num: .quad 0x202
+num: .quad -0x1
 CountBits: .zero 4

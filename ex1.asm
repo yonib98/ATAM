@@ -2,16 +2,18 @@
 
 .section .text
 _start:
-movq (num), %rax
-xor %ecx,%ecx  #i=0
-mov $2, %r9
+#num, countbits
+movq (num), %rbx
+xor %ecx, %ecx #counter=0
+xor %ax,%ax
+mov $2,%r8
 for_HW1:
- cqo
- div %r9
- addl %edx,%ecx
- shr $1, %rax
- test %rax,%rax
- jne for_HW1
- movl %ecx, (CountBits)
- 
- 
+movb %bl,%al
+divb %r8b
+addb %ah,%cl
+
+shr $1,%rbx
+cmp $0, %rbx
+jne for_HW1
+
+movl %ecx,(CountBits)

@@ -1,5 +1,5 @@
 .global _start
-
+ 
 .section .text
 _start:
 mov $-1,%eax
@@ -18,7 +18,7 @@ cmp $0,%r11d
 je leftovers_array1
 
 cmp %r10d,%r11d
-jg choose_array2
+ja choose_array2
 
 choose_array1:
 cmp %r10d,%eax
@@ -54,6 +54,7 @@ inc %rbx
 movl %r10d, %eax
 movl (%r12,%rbx,4), %r10d
 jmp leftovers_array1
+
 leftovers_array2:
 
 cmp $0,%r11d

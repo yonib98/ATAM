@@ -1,13 +1,9 @@
-.global main
-.section .data
-source: .ascii "memmove can be very useful..."
-#:memmove is very very useful"
-#         is very useful
-num: .int -8
+.global _start
+
 .section .text
-main:
-lea source+8, %rbx #rbx=source
-lea source, %rdx #rdx=dest
+_start:
+lea source, %rbx 
+lea destination, %rdx 
 movl num, %r8d 
 movsx %r8d, %r8 #r8=num
 cmp $0,%r8d

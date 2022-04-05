@@ -1,50 +1,30 @@
-.global main
-.section .data
-root:
-    .quad A
-A:
-.quad 20
-.quad B
-.quad C
+.global _start
 
-B:
-.quad 10
-.quad 0
-.quad D
-
-C:
-.quad 26
-.quad 0
-.quad 0
-
-D:
-.quad 13
-.quad 0
-.quad 0
-
-new_node: .quad 26,0,0
 .section .text
-main:
+_start:
 movq (new_node),%r10 #r10=new_node->data
 movq (root),%r12 #r12 = root =A
+cmp $0, %r12
+je create_root
 
 search:
 movq (%r12),%r11  #r11=A->data
 cmp %r11,%r10
 je end
-jg turn_right
+ja turn_right
+
 turn_left:
-movq 8(%r12),%rax
-cmp $0,%rax
+movq 8(%r12),%rax #rax<-left son pointer
+cmp $0,%rax #rax=NULL?
 je create_left_son
-add $24,%r12
+movq %rax,%r12
 jmp search
 
 turn_right:
-movq 16(%r12),%rax
+movq 16(%r12),%rax #rax<- right son pointer
 cmp $0,%rax
 je create_right_son
-add $48,%r12
+movq %rax,%r12
 jmp search
 
 create_left_son:
@@ -56,5 +36,9 @@ create_right_son:
 lea new_node,%rbx
 movq %rbx,16(%r12)
 jmp end
+
+create_root:
+lea new_node,%rbx
+movq %rbx,(root)
 
 end:
